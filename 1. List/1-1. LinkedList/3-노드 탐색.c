@@ -40,7 +40,7 @@ Node* SLL_GetNodeAt(Node* Head, int Location){
     while(Current!=NULL && (--Location)>=0){
         Current = Current->NextNode;
     }
-    /*index out of range의 경우 예외 처리가 없다.*/
+    /*인덱스가 범위를 벗어날 경우의 예외 처리가 없다.*/
 
     return Current;
 }

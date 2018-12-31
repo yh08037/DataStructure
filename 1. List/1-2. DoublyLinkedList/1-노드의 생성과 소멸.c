@@ -3,8 +3,8 @@
 
 typedef struct tagNode{
     int Data;
-    tagNode* PrevNode;
-    tagNode* NextNode;
+    struct tagNode* PrevNode;
+    struct tagNode* NextNode;
 }Node;
 
 /*노드 생성*/

@@ -114,5 +114,87 @@ int SLL_GetNodeCount(Node* Head){
 
 ## 더블 링크드 리스트 (Doubly Linked List)
 
+```c
+typedef struct tagNode{
+    int Data;
+    struct tagNode* PrevNode;
+    struct tagNode* NextNode;
+}Node;
+```
+
+```c
+/*노드 생성*/
+Node* DLL_CreateNode(int NewData){
+    Node* NewNode = (Node*)malloc(sizeof(Node));
+
+    NewNode->Data = NewData;
+    NewNode->PrevNode = NULL;
+    NewNode->NextNode = NULL;
+
+    return NewNode;
+}
+```
+
+```c
+/*노드 소멸*/
+void DLL_DestroyNode(Node* Node){
+    free(Node);
+}
+```
+
+```c
+/*노드 추가*/
+void DLL_AppendNode(Node** Head, Node* NewNode){
+    if(*Head == NULL){
+        *Head = NewNode;
+    }
+    else{
+        Node* Tail = *Head;
+        while(Tail->NextNode != NULL){
+            Tail = Tail->NextNode;
+        }
+        Tail->NextNode = NewNode;
+        NewNode->PrevNode = Tail;
+    }
+}
+```
+
+```c
+/*노드 탐색*/
+Node* DLL_GetNodeAt(Node* Head, int Location){
+    Node* Current = Head;
+    \
+    while(Current!=NULL && (--Location)>=0){
+        Current = Current->NextNode;
+    }
+
+    return Current;
+}
+```
+
+```c
+/*노드 삭제*/
+void DLL_RemoveNode(Node** Head, Node* Remove){
+    if(*Head == Remove){
+        *Head = Remove->NextNode;
+        if(*Head != NULL){
+            (*Head)->PrevNode = NULL;
+        }
+        Remove->PrevNode = NULL;
+        Remove->NextNode = NULL;
+    }
+    else{
+        Node* Temp = Remove;
+
+        Remove->PrevNode->NextNode = Temp->NextNode;
+        if(Remove->NextNode != NULL){
+            Remove->NextNode->PrevNode = Temp->PrevNode;
+        }
+        Remove->PrevNode = NULL;
+        Remove->NextNode = NULL;
+    }
+}
+```
+
 ## 환형 링크드 리스트 (Circular Linked List)
 

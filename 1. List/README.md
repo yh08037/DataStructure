@@ -36,6 +36,21 @@ void SLL_DestroyNode(Node* Node){
 }
 ```
 
+```c
+void SLL_AppendNode(Node** Head, Node* NewNode){
+    if(*Head == NULL){
+        *Head = NewNode;
+    }
+    else{
+        Node* Tail = *Head;
+        while(Tail->NextNode != NULL){
+            Tail = Tail->NextNode;
+        }
+        Tail->NextNode = NewNode;
+    }
+}
+```
+
 ## 더블 링크드 리스트 (Doubly Linked List)
 
 ## 환형 링크드 리스트 (Circular Linked List)

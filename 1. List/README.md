@@ -12,7 +12,31 @@
 
 ## 링크드 리스트 (Singly Linked List)
 
+```c
+typedef struct tagNode{
+    int Data;
+    struct tagNode* NextNode;
+}Node;
+```
+
+```c
+Node* SLL_CreateNode(int NewData){
+    Node* NewNode = (Node*)malloc(sizeof(Node));
+
+    NewNode->Data = NewData;
+    NewNode->NextNode = NULL;
+
+    return NewNode;
+}
+```
+
+```c
+void SLL_DestroyNode(Node* Node){
+    free(Node);
+}
+```
+
 ## 더블 링크드 리스트 (Doubly Linked List)
 
-## 환형 링크그 리스트 (Circular Linked List)
+## 환형 링크드 리스트 (Circular Linked List)
 

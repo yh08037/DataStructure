@@ -111,7 +111,6 @@ int SLL_GetNodeCount(Node* Head){
 }
 ```
 
-
 ## 더블 링크드 리스트 (Doubly Linked List)
 
 ```c

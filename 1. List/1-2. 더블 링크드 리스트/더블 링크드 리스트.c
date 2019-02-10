@@ -7,7 +7,37 @@ typedef struct tagNode{
     struct tagNode* NextNode;
 }Node;
 
-/*ÎÖ∏Îìú ÏÉùÏÑ±*/
+Node* DLL_CreateNode(int NewData);
+void DLL_DestroyNode(Node* Node);
+void DLL_AppendNode(Node** Head, Node* NewNode);
+Node* DLL_GetNodeAt(Node* Head, int Location);
+void DLL_RemoveNode(Node** Head, Node* Remove);
+void DLL_InsertAfter(Node* Current, Node* NewNode);
+int DLL_GetNodeCount(Node* Head);
+
+
+int main(void){
+    Node* List = NULL;
+
+    DLL_AppendNode(&List, DLL_CreateNode(117)); //117
+    DLL_AppendNode(&List, DLL_CreateNode(119)); //117, 119
+    DLL_AppendNode(&List, DLL_CreateNode(234)); //117, 119, 234
+    DLL_RemoveNode(&List, DLL_GetNodeAt(List, 1)); // 117, 234
+    DLL_InsertAfter(DLL_GetNodeAt(List, 0), DLL_CreateNode(215)); //117, 215, 234
+
+    int Length = DLL_GetNodeCount(List);
+    Node* Current;
+
+    for(int i=0; i<Length; i++){
+        Current = DLL_GetNodeAt(List, i);
+        printf("%d ", Current->Data); //117, 215, 234
+    }
+
+    return 0;
+}
+
+
+/*≥ÎµÂ ª˝º∫*/
 Node* DLL_CreateNode(int NewData){
     Node* NewNode = (Node*)malloc(sizeof(Node));
 
@@ -18,12 +48,12 @@ Node* DLL_CreateNode(int NewData){
     return NewNode;
 }
 
-/*ÎÖ∏Îìú ÏÜåÎ©∏*/
+/*≥ÎµÂ º“∏Í*/
 void DLL_DestroyNode(Node* Node){
     free(Node);
 }
 
-/*ÎÖ∏Îìú Ï∂îÍ∞Ä*/
+/*≥ÎµÂ √ﬂ∞°*/
 void DLL_AppendNode(Node** Head, Node* NewNode){
     if(*Head == NULL){
         *Head = NewNode;
@@ -38,7 +68,7 @@ void DLL_AppendNode(Node** Head, Node* NewNode){
     }
 }
 
-/*ÎÖ∏Îìú ÌÉêÏÉâ*/
+/*≥ÎµÂ ≈Ωªˆ*/
 Node* DLL_GetNodeAt(Node* Head, int Location){
     Node* Current = Head;
     \
@@ -49,7 +79,7 @@ Node* DLL_GetNodeAt(Node* Head, int Location){
     return Current;
 }
 
-/*ÎÖ∏Îìú ÏÇ≠Ï†ú*/
+/*≥ÎµÂ ªË¡¶*/
 void DLL_RemoveNode(Node** Head, Node* Remove){
     if(*Head == Remove){
         *Head = Remove->NextNode;
@@ -71,7 +101,7 @@ void DLL_RemoveNode(Node** Head, Node* Remove){
     }
 }
 
-/*ÎÖ∏Îìú ÏÇΩÏûÖ*/
+/*≥ÎµÂ ª¿‘*/
 void DLL_InsertAfter(Node* Current, Node* NewNode){
     NewNode->NextNode = Current->NextNode;
     NewNode->PrevNode = Current;
@@ -92,25 +122,4 @@ int DLL_GetNodeCount(Node* Head){
     }
 
     return Count;
-}
-
-
-int main(void){
-    Node* List = NULL;
-
-    DLL_AppendNode(&List, DLL_CreateNode(117)); //117
-    DLL_AppendNode(&List, DLL_CreateNode(119)); //117, 119
-    DLL_AppendNode(&List, DLL_CreateNode(234)); //117, 119, 234
-    DLL_RemoveNode(&List, DLL_GetNodeAt(List, 1)); // 117, 234
-    DLL_InsertAfter(DLL_GetNodeAt(List, 0), DLL_CreateNode(215)); //117, 215, 234
-
-    int Length = DLL_GetNodeCount(List);
-    Node* Current;
-
-    for(int i=0; i<Length; i++){
-        Current = DLL_GetNodeAt(List, i);
-        printf("%d ", Current->Data); //117, 215, 234
-    }
-
-    return 0;
 }

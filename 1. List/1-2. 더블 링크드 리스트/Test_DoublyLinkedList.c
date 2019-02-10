@@ -8,14 +8,14 @@ int main( void )
     Node* NewNode = NULL;
     Node* Current = NULL;
 
-    /*  ë…¸ë“œ 5ê°œ ì¶”ê°€ */
+    /*  ³ëµå 5°³ Ãß°¡ */
     for ( i = 0; i<5; i++ )
     {
         NewNode = DLL_CreateNode( i );
         DLL_AppendNode( &List, NewNode );
     }
 
-    /*  ë¦¬ìŠ¤íŠ¸ ì¶œë ¥ */
+    /*  ¸®½ºÆ® Ãâ·Â */
     Count = DLL_GetNodeCount( List );
     for ( i = 0; i<Count; i++ )
     {
@@ -23,14 +23,14 @@ int main( void )
         printf( "List[%d] : %d\n", i, Current->Data );
     }
 
-    /*  ë¦¬ìŠ¤íŠ¸ì˜ ì„¸ë²ˆì§¸ ì¹¸ ë’¤ì— ë…¸ë“œ ì‚½ì… */
+    /*  ¸®½ºÆ®ÀÇ ¼¼¹øÂ° Ä­ µÚ¿¡ ³ëµå »ğÀÔ */
     printf( "\nInserting 3000 After [2]...\n\n" );
 
     Current = DLL_GetNodeAt( List, 2 );
     NewNode = DLL_CreateNode( 3000 );
     DLL_InsertAfter( Current, NewNode );
 
-    /*  ë¦¬ìŠ¤íŠ¸ ì¶œë ¥ */
+    /*  ¸®½ºÆ® Ãâ·Â */
     Count = DLL_GetNodeCount( List );
     for ( i = 0; i<Count; i++ )
     {
@@ -38,7 +38,7 @@ int main( void )
         printf( "List[%d] : %d\n", i, Current->Data );
     }
 
-    /*  ëª¨ë“  ë…¸ë“œë¥¼ ë©”ëª¨ë¦¬ì—ì„œ ì œê±°     */
+    /*  ¸ğµç ³ëµå¸¦ ¸Ş¸ğ¸®¿¡¼­ Á¦°Å     */
     printf( "\nDestroying List...\n" );
 
     Count = DLL_GetNodeCount(List);

@@ -1,13 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "DoublyLinkedList.h"
 
-typedef struct tagNode{
-    int Data;
-    struct tagNode* PrevNode;
-    struct tagNode* NextNode;
-}Node;
-
-/*ë…¸ë“œ ìƒì„±*/
+/*³ëµå »ı¼º*/
 Node* DLL_CreateNode(int NewData){
     Node* NewNode = (Node*)malloc(sizeof(Node));
 
@@ -18,12 +11,12 @@ Node* DLL_CreateNode(int NewData){
     return NewNode;
 }
 
-/*ë…¸ë“œ ì†Œë©¸*/
+/*³ëµå ¼Ò¸ê*/
 void DLL_DestroyNode(Node* Node){
     free(Node);
 }
 
-/*ë…¸ë“œ ì¶”ê°€*/
+/*³ëµå Ãß°¡*/
 void DLL_AppendNode(Node** Head, Node* NewNode){
     if(*Head == NULL){
         *Head = NewNode;
@@ -38,7 +31,7 @@ void DLL_AppendNode(Node** Head, Node* NewNode){
     }
 }
 
-/*ë…¸ë“œ íƒìƒ‰*/
+/*³ëµå Å½»ö*/
 Node* DLL_GetNodeAt(Node* Head, int Location){
     Node* Current = Head;
     \
@@ -49,7 +42,7 @@ Node* DLL_GetNodeAt(Node* Head, int Location){
     return Current;
 }
 
-/*ë…¸ë“œ ì‚­ì œ*/
+/*³ëµå »èÁ¦*/
 void DLL_RemoveNode(Node** Head, Node* Remove){
     if(*Head == Remove){
         *Head = Remove->NextNode;
@@ -71,17 +64,25 @@ void DLL_RemoveNode(Node** Head, Node* Remove){
     }
 }
 
+/*³ëµå »ğÀÔ*/
+void DLL_InsertAfter(Node* Current, Node* NewNode){
+    NewNode->NextNode = Current->NextNode;
+    NewNode->PrevNode = Current;
 
-int main(void){
-    Node* List = NULL;
+    if(Current->NextNode != NULL){
+        Current->NextNode->PrevNode = NewNode;
+    }
+    Current->NextNode = NewNode;
+}
 
-    DLL_AppendNode(&List, DLL_CreateNode(117)); //117
-    DLL_AppendNode(&List, DLL_CreateNode(119)); //117, 119
-    DLL_AppendNode(&List, DLL_CreateNode(234)); //117, 119, 234
+int DLL_GetNodeCount(Node* Head){
+    int Count = 0;
+    Node* Current = Head;
 
-    DLL_RemoveNode(&List, DLL_GetNodeAt(List, 1)); // 117, 234
+    while(Current != NULL){
+        Current = Current->NextNode;
+        Count++;
+    }
 
-    printf("%d", DLL_GetNodeAt(List, 1)->Data); //234
-
-    return 0;
+    return Count;
 }

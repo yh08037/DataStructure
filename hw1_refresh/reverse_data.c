@@ -1,32 +1,35 @@
-// #include "arr_stack.h"
-#include "ll_stack.h"
+#include "arr_stack.h"
+// #include "ll_stack.h"
 #include <stdio.h>
 
 int main() {
 
     int i = 0;
-    int* item;
+    int item;
 
-    Stack* pStack = CreateStack(100);
+    Stack* stack;
+
+    if ( !(stack = CreateStack(100)) ) {
+      printf("Memory allocation of stack failed. Program terminates.\n");
+      return -1;
+    }
 
     printf("Input 10 numbers : ");
 
     for (i = 0; i < 10; i++) {
-        item = (int*)malloc(sizeof(int));
-        scanf("%d", item);
-        Push(pStack, item);
+        scanf("%d", &item);
+        Push(stack, item);
     }
 
     printf("Reversed : ");
-    while(!IsEmptyStack(pStack)) {
-        item = (int*)Pop(pStack);
-        printf("%d ", *item);
-        free(item);
+    while( !IsEmptyStack(stack) ) {
+        item = Pop(stack);
+        printf("%d ", item);
     }
     printf("\n");
 
-    DestroyStack(pStack);
-    pStack = NULL;
+    DestroyStack(stack);
+    stack = NULL;
 
     return 0;
 }

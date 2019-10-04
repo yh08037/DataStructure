@@ -22,7 +22,7 @@ Stack* CreateStack(int size) {
 
 void Push(Stack* stack, Element item) {
   if ( !IsFullStack(stack) )
-    stack->data[stack->top++] = item;
+    stack->data[++stack->top] = item;
 }
 
 
@@ -46,7 +46,7 @@ void DestroyStack(Stack* stack) {
 }
 
 
-bool IsFullStack(Stack* Stack) {
+bool IsFullStack(Stack* stack) {
   return stack->top == stack->size - 1;
 }
 

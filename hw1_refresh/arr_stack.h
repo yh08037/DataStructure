@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef char* Element;
+typedef int Element;
 
 typedef struct {
   Element* data;
@@ -12,12 +12,12 @@ typedef struct {
   int top;
 } Stack;
 
-Stack CreateStack(int size);
+Stack* CreateStack(int size);
 void Push(Stack* stack, Element item);
 Element Pop(Stack* stack);
 Element Top(Stack* stack);
 void DestroyStack(Stack* stack);
-bool IsFullStack(Stack* Stack);
+bool IsFullStack(Stack* stack);
 bool IsEmptyStack(Stack* stack);
 int CountStackItem(Stack* stack);
 void ClearStack(Stack* stack);

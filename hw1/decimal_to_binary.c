@@ -1,5 +1,5 @@
-// #include "arr_stack.h"
-#include "ll_stack.h"
+#include "arr_stack.h"
+// #include "ll_stack.h"
 #include <stdio.h>
 
 int main() {
@@ -9,7 +9,7 @@ int main() {
     printf("Enter an integer : ");
     scanf("%d", &decimal_number);
 
-    Stack* pStack = CreateStack(10);
+    Stack* pStack = CreateStack(100);
 
     while (decimal_number != 0) {
         data = decimal_number % 2;

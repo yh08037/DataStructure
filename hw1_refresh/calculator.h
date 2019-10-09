@@ -14,9 +14,9 @@ typedef enum {
 } SYMBOL;
 
 char* getString(void);
+bool isValidCharaters(char* string);
 
 bool isValidParenthesis(char* string);
-bool isValidCharacter(char* string);
 
 bool isOperator(char chr);
 bool isNumber(char chr);

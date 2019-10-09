@@ -17,6 +17,23 @@ char* getString(void) {
 }
 
 
+bool isValidCharaters(char* string) {
+  int index = -1;
+  char chr;
+
+  while ( (chr = string[++index]) != '\0' ) {
+    if (
+      !isOperator(chr) && !isNumber(chr) && chr != LEFT_PARENTHESIS
+      && chr != RIGHT_PARENTHESIS && chr != SPACE
+    ) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+
 bool isValidParenthesis(char* string) {
   int index = -1;
   int paren = 0;
@@ -39,11 +56,6 @@ bool isValidParenthesis(char* string) {
 }
 
 
-bool isValidCharacters(char* string) {
-
-}
-
-
 bool isOperator(char chr) {
   return chr == PLUS || chr == MINUS || chr == TIMES || chr == DIVIDE;
 }
@@ -60,8 +72,6 @@ bool isValidExpression(char* string) {
   char past = PLUS;
   char curr;
 
-  if ( !isValidParenthesis(string) )
-    return false;
 
   while ( (curr = string[++index]) != '\0' ) {
     if ( curr == SPACE )

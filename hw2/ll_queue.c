@@ -34,6 +34,8 @@ bool Enqueue(Queue* queue, void* item) {
   }
 
   queue->count++;
+
+  return true;
 }
 
 
@@ -42,7 +44,7 @@ void* Dequeue(Queue* queue) {
     return NULL;
 
   Node* front = queue->front;
-  void* item  = front->item;
+  void* item  = front->data;
 
   if ( queue->count == 1 ) {
     queue->front = NULL;
@@ -63,8 +65,9 @@ bool IsFullQueue(Queue* queue) {
   Node* temp;
 
   if ((temp = (Node*)malloc(sizeof(Node)))) {
-      free(temp);
-      return false;
+    free(temp);
+    return false;
+  }
 
   return true;
 }
@@ -82,6 +85,6 @@ void DestroyQueue(Queue* queue) {
   while ( !(IsEmptyQueue(queue)) ) {
     free(Dequeue(queue));
   }
-  
+
   free(queue);
 }

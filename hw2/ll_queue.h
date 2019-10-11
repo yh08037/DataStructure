@@ -7,7 +7,7 @@
 
 typedef struct _node {
   void* data;
-  _node* next;
+  struct _node* next;
 } Node;
 
 

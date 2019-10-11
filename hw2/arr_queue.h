@@ -3,9 +3,7 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
-#include <string.h>
 
-typedef int Elelement;
 
 typedef struct {
   void** array;

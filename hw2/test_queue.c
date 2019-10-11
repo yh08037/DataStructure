@@ -1,4 +1,5 @@
 #include "arr_queue.h"
+// #include "ll_queue.h"
 #include <stdio.h>
 
 int main() {
@@ -33,8 +34,6 @@ int main() {
       }
     }
     else if ( input == 3 ) {
-      while ( !IsEmptyQueue(queue) )
-        free(Dequeue(queue));
       DestroyQueue(queue);
       printf("Queue destroyed. exit.\n");
       break;

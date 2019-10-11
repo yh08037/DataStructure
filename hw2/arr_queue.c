@@ -51,9 +51,14 @@ bool IsEmptyQueue(Queue* queue) {
 
 
 void DestroyQueue(Queue* queue) {
-  if ( queue != NULL ) {
-    free(queue->array);
-    free(queue);
-    queue = NULL;
-  }
+  if ( queue == NULL )
+    return;
+
+  while ( !IsEmptyQueue(queue) )
+    free(Dequeue(queue));
+
+  free(queue->array);
+  free(queue);
+  queue = NULL;
+
 }

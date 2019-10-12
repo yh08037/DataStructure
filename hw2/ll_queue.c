@@ -95,11 +95,12 @@ void PrintQueue(Queue* queue, void (*Print)(void* item)) {
     return;
 
   Node* cur = queue->front;
+  int count = 1;
 
   printf("(");
   while ( cur != NULL ) {
     Print(cur->data);
-    printf(", ");
+    printf("%d, ", count++);
     cur = cur->next;
   }
   if ( IsEmptyQueue(queue) )

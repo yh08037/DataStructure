@@ -23,5 +23,6 @@ void* Dequeue(Queue* queue);
 bool IsFullQueue(Queue* queue);
 bool IsEmptyQueue(Queue* queue);
 void DestroyQueue(Queue* queue);
+void PrintQueue(Queue* queue);
 
 #endif

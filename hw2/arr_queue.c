@@ -70,9 +70,13 @@ void PrintQueue(Queue* queue, void (*Print)(void* item)) {
 
   int cur = queue->front;
 
+  printf("(");
   while ( (cur++ % queue->size) != queue->rear ) {
     Print(queue->array[cur]);
-    printf(" ");
+    printf(", ");
   }
-  printf("\n");
+  if ( IsEmptyQueue(queue) )
+    printf(")\n");
+  else
+    printf("\b\b) \n");
 }

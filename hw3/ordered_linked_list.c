@@ -7,7 +7,7 @@ OrderedList* CreateList(int (*compare)(void* arg1, void* arg2)) {
     return NULL;
 
   newList->count = 0;
-  newList->head = newList->pos = newList->tail = NULL;
+  newList->head = newList->pos = NULL;
   newList->compare = compare;
 
   return newList;
@@ -33,7 +33,7 @@ void AddNode(OrderedList* list, void* newData) {
   Node* newNode = GenerateNode(newData);
 
   if ( IsEmptyList(list) ) {
-    list->head = list->pos = list->tail = newNode;
+    list->head = list->pos = newNode;
     list->count++;
     return;
   }

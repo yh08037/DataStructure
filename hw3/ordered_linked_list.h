@@ -14,7 +14,7 @@ typedef struct _node {
 
 typedef struct {
   int count;
-  Node *head, *pos, *tail;
+  Node *head, *pos;
   int (*compare)(void*, void*);
 } OrderedList;
 

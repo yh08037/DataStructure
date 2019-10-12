@@ -20,6 +20,7 @@ int main() {
   queue = CreateQueue(MAX_QUEUE_SIZE);
 
   while (1) {
+    input = -1;
     printf("In (0), Out (1), exit(2) : ");
     scanf("%d", &input);
     while (getchar() != '\n');  // flush buffer

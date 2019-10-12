@@ -23,8 +23,10 @@ int main() {
   int input, *temp;
 
   while ( true ) {
+    input = -1;
     printf("In (0), Search (1), Out(2), Exit (3) : ");
     scanf("%d", &input);
+    while (getchar() != '\n');  // flush buffer
 
     if ( input == 0 ) {
       if ( IsFullList(list) ) {
@@ -33,6 +35,7 @@ int main() {
       else {
         printf("In : ");
         scanf("%d", &input);
+        while (getchar() != '\n');  // flush buffer
         temp = (int*)malloc(sizeof(int));
         *temp = input;
         AddNode(list, temp);
@@ -42,6 +45,7 @@ int main() {
     else if ( input == 1 ) {
       printf("Search : ");
       scanf("%d", &input);
+      while (getchar() != '\n');  // flush buffer
       if ( SearchList(list, &input))
         printf("My List has %d.\n", input);
       else
@@ -55,6 +59,7 @@ int main() {
       else {
         printf("Out : ");
         scanf("%d", &input);
+        while (getchar() != '\n');  // flush buffer
         if ( RemoveNode(list, &input) )
           printf("%d was removed.\n", input);
         else
@@ -70,7 +75,7 @@ int main() {
     }
 
     else {
-      printf("Invalid input. Try again.\n");
+      printf("Invalid input. Try again.\n\n");
       continue;
     }
 

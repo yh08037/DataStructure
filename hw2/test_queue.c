@@ -1,6 +1,11 @@
 #include "arr_queue.h"
 // #include "ll_queue.h"
-#include <stdio.h>
+
+void PrintInt(void* item) {
+  if ( item != NULL )
+    printf("%d", *(int*)item);
+}
+
 
 int main() {
   Queue* queue;
@@ -53,6 +58,8 @@ int main() {
     else {
       printf("Invalid input. Try again.\n");
     }
+    printf("Current : ");
+    PrintQueue(queue, PrintInt);
     printf("\n");
   }
 

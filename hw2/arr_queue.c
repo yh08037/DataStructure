@@ -62,3 +62,17 @@ void DestroyQueue(Queue* queue) {
   queue = NULL;
 
 }
+
+
+void PrintQueue(Queue* queue, void (*Print)(void* item)) {
+  if ( queue == NULL )
+    return;
+
+  int cur = queue->front;
+
+  while ( (cur++ % queue->size) != queue->rear ) {
+    Print(queue->array[cur]);
+    printf(" ");
+  }
+  printf("\n");
+}

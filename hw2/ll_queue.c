@@ -88,3 +88,18 @@ void DestroyQueue(Queue* queue) {
 
   free(queue);
 }
+
+
+void PrintQueue(Queue* queue, void (*Print)(void* item)) {
+  if ( queue == NULL )
+    return;
+
+  Node* cur = queue->front;
+
+  while ( cur != NULL ) {
+    Print(cur->data);
+    printf(" ");
+    cur = cur->next;
+  }
+  printf("\n");
+}

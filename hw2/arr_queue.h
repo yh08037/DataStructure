@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 
 typedef struct {
@@ -18,6 +19,6 @@ void* Dequeue(Queue* queue);
 bool IsFullQueue(Queue* queue);
 bool IsEmptyQueue(Queue* queue);
 void DestroyQueue(Queue* queue);
-void PrintQueue(Queue* queue);
+void PrintQueue(Queue* queue, void (*Print)(void* item));
 
 #endif

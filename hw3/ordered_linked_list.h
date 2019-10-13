@@ -20,7 +20,6 @@ typedef struct {
 
 
 OrderedList* CreateList(int (*compare)(void*, void*));
-Node* GenerateNode(void* newData);
 void AddNode(OrderedList* list, void* newData);
 bool RemoveNode(OrderedList* list, void* data);
 Node* SearchList(OrderedList* list, void* key);

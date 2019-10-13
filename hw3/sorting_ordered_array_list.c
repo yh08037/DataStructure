@@ -1,5 +1,7 @@
-#include "ordered_linked_list.h"
-// #include "ordered_array_list.h"
+#include "ordered_array_list.h"
+
+#define MAX_LIST_LEN 100
+
 
 int compareInt(void* arg1, void* arg2) {
   return (*(int*)arg1 - *(int*)arg2);
@@ -11,7 +13,7 @@ void printInt(void* item) {
 
 
 int main() {
-  OrderedList* list = CreateList(compareInt);
+  OrderedList* list = CreateList(MAX_LIST_LEN, compareInt);
 
   if ( list == NULL ) {
     printf("List allocation failed. Program terminates.\n");
@@ -46,7 +48,7 @@ int main() {
       printf("Search : ");
       scanf("%d", &input);
       while (getchar() != '\n');  // flush buffer
-      if ( SearchList(list, &input))
+      if ( SearchList(list, &input) )
         printf("My List has %d.\n", input);
       else
         printf("My List does not have %d\n", input);

@@ -14,23 +14,16 @@ OrderedList* CreateList(int (*compare)(void* arg1, void* arg2)) {
 }
 
 
-Node* GenerateNode(void* newData) {
-  Node* newNode;
-  if ( !(newNode = (Node*)malloc(sizeof(Node))) )
-    return NULL;
-
-  newNode->data = newData;
-  newNode->next = NULL;
-
-  return newNode;
-}
-
-
 void AddNode(OrderedList* list, void* newData) {
   if ( list == NULL )
     return;
 
-  Node* newNode = GenerateNode(newData);
+  Node* newNode;
+  if ( !(newNode = (Node*)malloc(sizeof(Node))) )
+    return;
+
+  newNode->data = newData;
+  newNode->next = NULL;
 
   if ( IsEmptyList(list) ) {
     list->head = list->pos = newNode;

@@ -31,17 +31,6 @@ void DLL_AppendNode(Node** Head, Node* NewNode){
     }
 }
 
-/*노드 탐색*/
-Node* DLL_GetNodeAt(Node* Head, int Location){
-    Node* Current = Head;
-    \
-    while(Current!=NULL && (--Location)>=0){
-        Current = Current->NextNode;
-    }
-
-    return Current;
-}
-
 /*노드 삭제*/
 void DLL_RemoveNode(Node** Head, Node* Remove){
     if(*Head == Remove){
@@ -85,4 +74,15 @@ int DLL_GetNodeCount(Node* Head){
     }
 
     return Count;
+}
+
+/*노드 탐색*/
+Node* DLL_GetNodeAt(Node* Head, int Location){
+  Node* Current = Head;
+  \
+  while(Current!=NULL && (--Location)>=0){
+    Current = Current->NextNode;
+  }
+
+  return Current;
 }

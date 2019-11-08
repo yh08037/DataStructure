@@ -7,7 +7,7 @@ int main() {
   char input_string[BUFFER_SIZE];
   Tree* bt;
 
-  printf("(max input string length : 255)\n\n");
+  // printf("(max input string length : 255)\n\n");
 
   printf("input : ");
   scanf("%[^\n]s", input_string);

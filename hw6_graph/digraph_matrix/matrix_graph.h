@@ -7,8 +7,9 @@
 
 
 typedef struct _matrix_graph {
-  int matrix[MAX_NODE_NUM];
-  int count;
+  int   matrix[MAX_NODE_NUM][MAX_NODE_NUM];
+  void* data_array[MAX_NODE_NUM];
+  int   index;
   int (*compare)(void*, void*);
 } M_graph;
 

@@ -3,8 +3,13 @@
 
 #include <stdlib.h>
 
-typedef struct _matrix_graph {
+#define MAX_NODE_NUM 256
 
+
+typedef struct _matrix_graph {
+  int matrix[MAX_NODE_NUM];
+  int count;
+  int (*compare)(void*, void*);
 } M_graph;
 
 

@@ -5,6 +5,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include "ll_queue.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -21,10 +22,10 @@ typedef struct tagVertex {
 } Vertex;
 
 typedef struct tagEdge {
-  int    Weight;
   struct tagEdge* Next;
-  Vertex* From;
-  Vertex* Target;
+  int             Weight;
+  Vertex*         From;
+  Vertex*         Target;
 } Edge;
 
 typedef struct tagGraph {
@@ -44,5 +45,11 @@ void    DestroyEdge( Edge* E );
 void   AddVertex( Graph* G, Vertex* V );
 void   AddEdge( Vertex* V, Edge* E );
 void   ResetVisited( Graph* G );
+
+void DFS( Vertex* V );
+void BFS( Vertex* V );
+
+Vertex** _alloc_Vertex( Vertex* V );
+Vertex* _free_Vertex( void* pV );
 
 #endif

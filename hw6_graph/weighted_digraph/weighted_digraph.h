@@ -5,9 +5,11 @@
 #ifndef WEIGHTED_DIGRAPH_H
 #define WEIGHTED_DIGRAPH_H
 
-#include "ll_queue.h"
+#include "PriorityQueue.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+#define MAX_WEIGHT 36267
 
 enum VisitMode { Visited, NotVisited };
 
@@ -46,10 +48,9 @@ void   AddVertex( Graph* G, Vertex* V );
 void   AddEdge( Vertex* V, Edge* E );
 void   ResetVisited( Graph* G );
 
-void DFS( Vertex* V );
-void BFS( Vertex* V );
+void   Prim( Graph* G, Vertex* start );
+void   Dijkstra( Graph* G, Vertex* start );
 
-Vertex** _alloc_Vertex( Vertex* V );
-Vertex* _free_Vertex( void* pV );
+void   PrintGraph( Graph* G );
 
 #endif // WEIGHTED_DIGRAPH_H

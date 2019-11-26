@@ -43,12 +43,15 @@ int main( void )
 
   fclose(fp);
 
-  printf("Minimum spanning tree : ");
+  printf("Minimum spanning tree : \n");
+  Prim(graph, start);
+
 
   printf("\n");
 
-  printf("Shortest path from %c : ", start_char);
-  
+  printf("Shortest path from %c : \n", start_char);
+  Dijkstra(graph, start);
+
   printf("\n");
 
 

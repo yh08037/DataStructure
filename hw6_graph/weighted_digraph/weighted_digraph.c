@@ -91,79 +91,188 @@ void AddEdge( Vertex* V, Edge* E ) {
   }
 }
 
-void ResetVisited( Graph* G ) {
+void Prim( Graph* G, Vertex* start ) {
+  int i = 0;
+
+  PQNode         StartNode = { 0, start };
+  PriorityQueue* PQ        = PQ_Create(10);
+
+  Vertex*  CurrentVertex = NULL;
+  Edge*    CurrentEdge   = NULL;
+
+  int*     Weights       = (int*) malloc( sizeof(int) * G->VertexCount );
+  Vertex** MSTVertices   = (Vertex**) malloc( sizeof(Vertex*) * G->VertexCount );
+  Vertex** Fringes       = (Vertex**) malloc( sizeof(Vertex*) * G->VertexCount );
+  Vertex** Precedences   = (Vertex**) malloc( sizeof(Vertex*) * G->VertexCount );
+  Graph*   MST           = CreateGraph();
+
+  Vertex *NewVertex, *TargetVertex;
+  PQNode Popped, NewNode;
+  int FromIndex, ToIndex;
+
+  CurrentVertex = G->Vertices;
+  while ( CurrentVertex != NULL ) {
+    NewVertex = CreateVertex( CurrentVertex->Data );
+    AddVertex( MST, NewVertex);
+
+    Fringes[i]     = NULL;
+    Precedences[i] = NULL;
+    MSTVertices[i] = NewVertex;
+    Weights[i]     = MAX_WEIGHT;
+    CurrentVertex  = CurrentVertex->Next;
+    i++;
+  }
+
+  PQ_Enqueue ( PQ, StartNode );
+
+  Weights[start->Index] = 0;
+
+  while( ! PQ_IsEmpty( PQ ) ) {
+    PQ_Dequeue(PQ, &Popped);
+    CurrentVertex = (Vertex*)Popped.Data;
+
+    Fringes[CurrentVertex->Index] = CurrentVertex;
+
+    CurrentEdge = CurrentVertex->AdjacencyList;
+
+    while ( CurrentEdge != NULL ) {
+      TargetVertex = CurrentEdge->Target;
+
+      if ( Fringes[TargetVertex->Index] == NULL &&
+           CurrentEdge->Weight < Weights[TargetVertex->Index] ) {
+        NewNode.Priority = CurrentEdge->Weight;
+        NewNode.Data = TargetVertex;
+        PQ_Enqueue ( PQ, NewNode );
+
+        Precedences[TargetVertex->Index] = CurrentEdge->From;
+        Weights[TargetVertex->Index]     = CurrentEdge->Weight;
+      }
+
+      CurrentEdge = CurrentEdge->Next;
+    }
+  }
+
+  for ( i=0; i<G->VertexCount; i++ ) {
+
+    if ( Precedences[i] == NULL ) continue;
+
+    FromIndex = Precedences[i]->Index;
+    ToIndex   = i;
+
+    AddEdge( MSTVertices[FromIndex],
+        CreateEdge( MSTVertices[FromIndex], MSTVertices[ToIndex],   Weights[i] ) );
+  }
+
+  PrintGraph( MST );
+
+  free( Fringes );
+  free( Precedences );
+  free( MSTVertices );
+  free( Weights );
+  DestroyGraph( MST );
+
+  PQ_Destroy( PQ );
+}
+
+void Dijkstra( Graph* G, Vertex* start ) {
+  int i = 0;
+
+  PQNode         StartNode = { 0, start };
+  PriorityQueue* PQ        = PQ_Create(10);
+
+  Vertex*  CurrentVertex = NULL;
+  Edge*    CurrentEdge   = NULL;
+
+  int*     Weights       = (int*) malloc( sizeof(int) * G->VertexCount );
+  Vertex** ShortestPathVertices = (Vertex**) malloc( sizeof(Vertex*) * G->VertexCount );
+  Vertex** Fringes       = (Vertex**) malloc( sizeof(Vertex*) * G->VertexCount );
+  Vertex** Precedences   = (Vertex**) malloc( sizeof(Vertex*) * G->VertexCount );
+  Graph*   ShortestPath  = CreateGraph();
+
+  Vertex *NewVertex, *TargetVertex;
+  PQNode Popped, NewNode;
+
+  CurrentVertex = G->Vertices;
+  while ( CurrentVertex != NULL ) {
+    NewVertex = CreateVertex( CurrentVertex->Data );
+    AddVertex( ShortestPath, NewVertex);
+
+    Fringes[i]     = NULL;
+    Precedences[i] = NULL;
+    ShortestPathVertices[i] = NewVertex;
+    Weights[i]     = MAX_WEIGHT;
+    CurrentVertex  = CurrentVertex->Next;
+    i++;
+  }
+
+  PQ_Enqueue ( PQ, StartNode );
+
+  Weights[start->Index] = 0;
+
+  while( ! PQ_IsEmpty( PQ ) ) {
+    PQ_Dequeue(PQ, &Popped);
+    CurrentVertex = (Vertex*)Popped.Data;
+
+    Fringes[CurrentVertex->Index] = CurrentVertex;
+
+    CurrentEdge = CurrentVertex->AdjacencyList;
+
+    while ( CurrentEdge != NULL ) {
+      TargetVertex = CurrentEdge->Target;
+
+      if ( Fringes[TargetVertex->Index] == NULL &&
+           Weights[CurrentVertex->Index] + CurrentEdge->Weight < Weights[TargetVertex->Index] ) {
+        NewNode.Priority = CurrentEdge->Weight;
+        NewNode.Data = TargetVertex;
+        PQ_Enqueue ( PQ, NewNode );
+
+        Precedences[TargetVertex->Index] = CurrentEdge->From;
+        Weights[TargetVertex->Index] = Weights[CurrentVertex->Index] + CurrentEdge->Weight;
+      }
+
+      CurrentEdge = CurrentEdge->Next;
+    }
+  }
+
+  for ( i=0; i<G->VertexCount; i++ ) {
+    int FromIndex, ToIndex;
+
+    if ( Precedences[i] == NULL ) continue;
+
+    FromIndex = Precedences[i]->Index;
+    ToIndex   = i;
+
+    printf("%c %c %d\n", start->Data, ShortestPathVertices[ToIndex]->Data, Weights[i] );
+  }
+
+  free( Fringes );
+  free( Precedences );
+  free( ShortestPathVertices );
+  free( Weights );
+  DestroyGraph( ShortestPath );
+
+  PQ_Destroy( PQ );
+}
+
+
+void PrintGraph ( Graph* G )
+{
   Vertex* V = NULL;
   Edge*   E = NULL;
 
-  if ( ( V = G->Vertices ) == NULL )
-      return;
+  if ( ( V = G->Vertices ) == NULL ) return;
 
   while ( V != NULL ) {
-    V->Visited = NotVisited;
-
     if ( (E = V->AdjacencyList) == NULL ) {
       V = V->Next;
       continue;
     }
 
     while ( E != NULL ) {
-      E->Target->Visited = NotVisited;
+      printf("%c %c\n", V->Data, E->Target->Data );
       E = E->Next;
     }
 
     V = V->Next;
   }
-}
-
-void DFS( Vertex* V ) {
-  Edge* E = NULL;
-
-  printf("%c ", V->Data);
-  V->Visited = Visited;
-
-  for ( E = V->AdjacencyList; E != NULL; E = E->Next ) {
-    if ( E->Target->Visited == NotVisited )
-      DFS( E->Target );
-  }
-}
-
-void BFS( Vertex* V ) {
-  Edge* E = NULL;
-  Queue* queue = CreateQueue();
-
-  printf("%c ", V->Data);
-  V->Visited = Visited;
-
-  Enqueue( queue, _alloc_Vertex( V ) );
-
-  while ( !IsEmptyQueue( queue ) ) {
-    V = _free_Vertex(Dequeue( queue ));
-    E = V->AdjacencyList;
-
-    while ( E != NULL ) {
-      V = E->Target;
-
-      if ( V != NULL && V->Visited == NotVisited ) {
-        printf("%c ", V->Data);
-        V->Visited = Visited;
-        Enqueue( queue, _alloc_Vertex( V ) );
-      }
-
-      E = E->Next;
-    }
-  }
-
-  DestroyQueue( queue );
-}
-
-Vertex** _alloc_Vertex( Vertex* V ) {
-  Vertex** pV = (Vertex**)malloc(sizeof(Vertex*));
-  *pV = V;
-  return pV;
-}
-
-Vertex* _free_Vertex( void* pV ) {
-  Vertex* V = *(Vertex**)pV;
-  free(pV);
-  return V;
 }

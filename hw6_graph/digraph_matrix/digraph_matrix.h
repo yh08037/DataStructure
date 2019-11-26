@@ -2,8 +2,8 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
-#ifndef MATRIX_GRAPH_H
-#define MATRIX_GRAPH_H
+#ifndef DIGRAPH_MATRIX_H
+#define DIGRAPH_MATRIX_H
 
 #include "ll_queue.h"
 #include <stdlib.h>
@@ -28,4 +28,4 @@ int* _alloc_int( int num );
 int _free_int( void* data );
 
 
-#endif // MATRIX_GRAPH_H
+#endif // DIGRAPH_MATRIX_H

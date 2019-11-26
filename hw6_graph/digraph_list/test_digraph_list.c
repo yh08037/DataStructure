@@ -1,5 +1,5 @@
-#include "Graph.h"
-#include "GraphTraversal.h"
+#include "digraph_list.h"
+
 
 int main( void )
 {
@@ -37,7 +37,7 @@ int main( void )
       AddVertex( graph, v2 );
     }
 
-    AddEdge( v1, CreateEdge(v1, v2, 0) );
+    AddEdge( v1, CreateEdge(v1, v2) );
   }
 
   fclose(fp);

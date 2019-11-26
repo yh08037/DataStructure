@@ -1,13 +1,12 @@
-#include "Graph.h"
-#include "GraphTraversal.h"
+#include "weighted_digraph.h"
+
 
 int main( void )
 {
-  int Mode  = 0;
   Graph* graph;
-  Vertex *start, *end;
+  Vertex *start, *v1, *v2;
   Vertex* array[128] = {0};
-  char start_char, end_char, temp;
+  char start_char, v1_char, v2_char;
   int weight;
   FILE* fp;
 
@@ -25,33 +24,31 @@ int main( void )
   AddVertex( graph, start );
 
 
-  while ( fscanf( fp, "%c %c %d\n", &start_char, &end_char, &weight ) == 3 ) {
+  while ( fscanf( fp, "%c %c %d\n", &v1_char, &v2_char, &weight ) == 3 ) {
 
-    if ( !(start = array[start_char]) ) {
-      start = CreateVertex( start_char );
-      array[start_char] = start;
-      AddVertex( graph, start );
+    if ( !(v1 = array[v1_char]) ) {
+      v1 = CreateVertex( v1_char );
+      array[v1_char] = v1;
+      AddVertex( graph, v1 );
     }
 
-    if ( !(end = array[end_char]) ) {
-      end = CreateVertex( end_char );
-      array[end_char] = end;
-      AddVertex( graph, end );
+    if ( !(v2 = array[v2_char]) ) {
+      v2 = CreateVertex( v2_char );
+      array[v2_char] = v2;
+      AddVertex( graph, v2 );
     }
 
-    AddEdge( start, CreateEdge(start, end, 0) );
+    AddEdge( v1, CreateEdge(v1, v2, weight) );
   }
 
   fclose(fp);
 
-  printf("Depth-first traversal : ");
-  DFS( graph->Vertices );
-  ResetVisited( graph );
+  printf("Minimum spanning tree : ");
+
   printf("\n");
 
-  printf("Breadth-first traversal : ");
-  BFS( graph->Vertices );
-  ResetVisited( graph );
+  printf("Shortest path from %c : ", start_char);
+  
   printf("\n");
 
 

@@ -2,8 +2,8 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
-#ifndef GRAPH_H
-#define GRAPH_H
+#ifndef DIGRAPH_LIST_H
+#define DIGRAPH_LIST_H
 
 #include "ll_queue.h"
 #include <stdio.h>
@@ -23,7 +23,6 @@ typedef struct tagVertex {
 
 typedef struct tagEdge {
   struct tagEdge* Next;
-  int             Weight;
   Vertex*         From;
   Vertex*         Target;
 } Edge;
@@ -39,7 +38,7 @@ void   DestroyGraph( Graph* G );
 Vertex* CreateVertex( ElementType Data );
 void    DestroyVertex( Vertex* V );
 
-Edge*   CreateEdge( Vertex* From, Vertex* Target, int Weight );
+Edge*   CreateEdge( Vertex* From, Vertex* Target);
 void    DestroyEdge( Edge* E );
 
 void   AddVertex( Graph* G, Vertex* V );
@@ -52,4 +51,4 @@ void BFS( Vertex* V );
 Vertex** _alloc_Vertex( Vertex* V );
 Vertex* _free_Vertex( void* pV );
 
-#endif
+#endif // DIGRAPH_LIST_H

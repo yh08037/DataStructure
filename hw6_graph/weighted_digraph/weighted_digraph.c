@@ -1,4 +1,5 @@
-#include "Graph.h"
+#include "weighted_digraph.h"
+
 
 Graph* CreateGraph() {
   Graph* graph = (Graph*)malloc( sizeof( Graph ) );
@@ -112,4 +113,57 @@ void ResetVisited( Graph* G ) {
 
     V = V->Next;
   }
+}
+
+void DFS( Vertex* V ) {
+  Edge* E = NULL;
+
+  printf("%c ", V->Data);
+  V->Visited = Visited;
+
+  for ( E = V->AdjacencyList; E != NULL; E = E->Next ) {
+    if ( E->Target->Visited == NotVisited )
+      DFS( E->Target );
+  }
+}
+
+void BFS( Vertex* V ) {
+  Edge* E = NULL;
+  Queue* queue = CreateQueue();
+
+  printf("%c ", V->Data);
+  V->Visited = Visited;
+
+  Enqueue( queue, _alloc_Vertex( V ) );
+
+  while ( !IsEmptyQueue( queue ) ) {
+    V = _free_Vertex(Dequeue( queue ));
+    E = V->AdjacencyList;
+
+    while ( E != NULL ) {
+      V = E->Target;
+
+      if ( V != NULL && V->Visited == NotVisited ) {
+        printf("%c ", V->Data);
+        V->Visited = Visited;
+        Enqueue( queue, _alloc_Vertex( V ) );
+      }
+
+      E = E->Next;
+    }
+  }
+
+  DestroyQueue( queue );
+}
+
+Vertex** _alloc_Vertex( Vertex* V ) {
+  Vertex** pV = (Vertex**)malloc(sizeof(Vertex*));
+  *pV = V;
+  return pV;
+}
+
+Vertex* _free_Vertex( void* pV ) {
+  Vertex* V = *(Vertex**)pV;
+  free(pV);
+  return V;
 }

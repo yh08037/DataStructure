@@ -2,9 +2,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
-#ifndef GRAPH_H
-#define GRAPH_H
+#ifndef WEIGHTED_DIGRAPH_H
+#define WEIGHTED_DIGRAPH_H
 
+#include "ll_queue.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -21,10 +22,10 @@ typedef struct tagVertex {
 } Vertex;
 
 typedef struct tagEdge {
-  int    Weight;
   struct tagEdge* Next;
-  Vertex* From;
-  Vertex* Target;
+  int             Weight;
+  Vertex*         From;
+  Vertex*         Target;
 } Edge;
 
 typedef struct tagGraph {
@@ -45,4 +46,10 @@ void   AddVertex( Graph* G, Vertex* V );
 void   AddEdge( Vertex* V, Edge* E );
 void   ResetVisited( Graph* G );
 
-#endif
+void DFS( Vertex* V );
+void BFS( Vertex* V );
+
+Vertex** _alloc_Vertex( Vertex* V );
+Vertex* _free_Vertex( void* pV );
+
+#endif // WEIGHTED_DIGRAPH_H

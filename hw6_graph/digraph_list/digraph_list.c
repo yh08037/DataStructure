@@ -1,4 +1,5 @@
-#include "Graph.h"
+#include "digraph_list.h"
+
 
 Graph* CreateGraph() {
   Graph* graph = (Graph*)malloc( sizeof( Graph ) );
@@ -46,12 +47,11 @@ void DestroyVertex( Vertex* V ) {
   free( V );
 }
 
-Edge* CreateEdge( Vertex* From, Vertex* Target, int Weight ) {
+Edge* CreateEdge( Vertex* From, Vertex* Target) {
   Edge* E   = (Edge*)malloc( sizeof( Edge ) );
   E->From   = From;
   E->Target = Target;
   E->Next   = NULL;
-  E->Weight = Weight;
 
   return E;
 }

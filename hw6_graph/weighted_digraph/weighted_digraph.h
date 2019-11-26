@@ -1,7 +1,3 @@
-#ifdef _MSC_VER
-#define _CRT_SECURE_NO_WARNINGS
-#endif
-
 #ifndef WEIGHTED_DIGRAPH_H
 #define WEIGHTED_DIGRAPH_H
 
@@ -48,8 +44,8 @@ void   AddVertex( Graph* G, Vertex* V );
 void   AddEdge( Vertex* V, Edge* E );
 void   ResetVisited( Graph* G );
 
-void   Prim( Graph* G, Vertex* start );
-void   Dijkstra( Graph* G, Vertex* start );
+void Prim( Graph* G, Vertex* start );
+void Dijkstra( Graph* G, Vertex* start );
 
 void   PrintGraph( Graph* G );
 

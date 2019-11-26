@@ -40,11 +40,14 @@ bool Enqueue(Queue* queue, void* item) {
 
 
 void* Dequeue(Queue* queue) {
+  Node* front;
+  void* item;
+
   if ( queue->count <= 0 )
     return NULL;
 
-  Node* front = queue->front;
-  void* item  = front->data;
+  front = queue->front;
+  item  = front->data;
 
   if ( queue->count == 1 ) {
     queue->front = NULL;
@@ -91,11 +94,14 @@ void DestroyQueue(Queue* queue) {
 
 
 void PrintQueue(Queue* queue, void (*Print)(void* item)) {
+  Node* cur;
+  int count;
+
   if ( queue == NULL )
     return;
 
-  Node* cur = queue->front;
-  int count = 1;
+  cur = queue->front;
+  count = 1;
 
   printf("(");
   while ( cur != NULL ) {

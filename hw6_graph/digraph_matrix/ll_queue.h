@@ -2,8 +2,9 @@
 #define LL_QUEUE_H
 
 #include <stdlib.h>
-#include <stdbool.h>
 #include <stdio.h>
+
+typedef enum{false, true} bool;
 
 
 typedef struct _node {

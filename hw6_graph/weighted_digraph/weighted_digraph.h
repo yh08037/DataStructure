@@ -8,6 +8,7 @@
 #define MAX_WEIGHT 36267
 
 enum VisitMode { Visited, NotVisited };
+enum Algorithm { prim, dijkstra };
 
 typedef char ElementType;
 
@@ -46,6 +47,7 @@ void   ResetVisited( Graph* G );
 
 void Prim( Graph* G, Vertex* start );
 void Dijkstra( Graph* G, Vertex* start );
+void template( Graph* G, Vertex* start, int mode );
 
 void   PrintGraph( Graph* G );
 

@@ -91,33 +91,42 @@ void AddEdge( Vertex* V, Edge* E ) {
   }
 }
 
+
 void Prim( Graph* G, Vertex* start ) {
+  template( G, start, prim );
+}
+
+void Dijkstra( Graph* G, Vertex* start ) {
+  template( G, start, dijkstra );
+}
+
+void template( Graph* G, Vertex* start, int mode ) {
   int i = 0;
 
-  PQNode         StartNode = { 0, start };
+  Node           StartNode = { 0, start };
   PriorityQueue* PQ        = PQ_Create(10);
 
   Vertex*  CurrentVertex = NULL;
   Edge*    CurrentEdge   = NULL;
 
   int*     Weights       = (int*) malloc( sizeof(int) * G->VertexCount );
-  Vertex** MSTVertices   = (Vertex**) malloc( sizeof(Vertex*) * G->VertexCount );
+  Vertex** new_Vertices  = (Vertex**) malloc( sizeof(Vertex*) * G->VertexCount );
   Vertex** Fringes       = (Vertex**) malloc( sizeof(Vertex*) * G->VertexCount );
   Vertex** Precedences   = (Vertex**) malloc( sizeof(Vertex*) * G->VertexCount );
-  Graph*   MST           = CreateGraph();
+  Graph*   new_Graph     = CreateGraph();
 
   Vertex *NewVertex, *TargetVertex;
-  PQNode Popped, NewNode;
+  Node Popped, NewNode;
   int FromIndex, ToIndex;
 
   CurrentVertex = G->Vertices;
   while ( CurrentVertex != NULL ) {
     NewVertex = CreateVertex( CurrentVertex->Data );
-    AddVertex( MST, NewVertex);
+    AddVertex( new_Graph, NewVertex);
 
     Fringes[i]     = NULL;
     Precedences[i] = NULL;
-    MSTVertices[i] = NewVertex;
+    new_Vertices[i] = NewVertex;
     Weights[i]     = MAX_WEIGHT;
     CurrentVertex  = CurrentVertex->Next;
     i++;
@@ -139,13 +148,17 @@ void Prim( Graph* G, Vertex* start ) {
       TargetVertex = CurrentEdge->Target;
 
       if ( Fringes[TargetVertex->Index] == NULL &&
-           CurrentEdge->Weight < Weights[TargetVertex->Index] ) {
+           ((mode == prim     && CurrentEdge->Weight < Weights[TargetVertex->Index]) ||
+            (mode == dijkstra && Weights[CurrentVertex->Index] + CurrentEdge->Weight < Weights[TargetVertex->Index])) ) {
         NewNode.Priority = CurrentEdge->Weight;
         NewNode.Data = TargetVertex;
         PQ_Enqueue ( PQ, NewNode );
 
         Precedences[TargetVertex->Index] = CurrentEdge->From;
-        Weights[TargetVertex->Index]     = CurrentEdge->Weight;
+        switch ( mode ) {
+          case prim:     Weights[TargetVertex->Index] = CurrentEdge->Weight; break;
+          case dijkstra: Weights[TargetVertex->Index] = Weights[CurrentVertex->Index] + CurrentEdge->Weight; break;
+        }
       }
 
       CurrentEdge = CurrentEdge->Next;
@@ -153,110 +166,35 @@ void Prim( Graph* G, Vertex* start ) {
   }
 
   for ( i=0; i<G->VertexCount; i++ ) {
-
     if ( Precedences[i] == NULL ) continue;
 
     FromIndex = Precedences[i]->Index;
     ToIndex   = i;
 
-    AddEdge( MSTVertices[FromIndex],
-        CreateEdge( MSTVertices[FromIndex], MSTVertices[ToIndex],   Weights[i] ) );
-  }
-
-  PrintGraph( MST );
-
-  free( Fringes );
-  free( Precedences );
-  free( MSTVertices );
-  free( Weights );
-  DestroyGraph( MST );
-
-  PQ_Destroy( PQ );
-}
-
-void Dijkstra( Graph* G, Vertex* start ) {
-  int i = 0;
-
-  PQNode         StartNode = { 0, start };
-  PriorityQueue* PQ        = PQ_Create(10);
-
-  Vertex*  CurrentVertex = NULL;
-  Edge*    CurrentEdge   = NULL;
-
-  int*     Weights       = (int*) malloc( sizeof(int) * G->VertexCount );
-  Vertex** ShortestPathVertices = (Vertex**) malloc( sizeof(Vertex*) * G->VertexCount );
-  Vertex** Fringes       = (Vertex**) malloc( sizeof(Vertex*) * G->VertexCount );
-  Vertex** Precedences   = (Vertex**) malloc( sizeof(Vertex*) * G->VertexCount );
-  Graph*   ShortestPath  = CreateGraph();
-
-  Vertex *NewVertex, *TargetVertex;
-  PQNode Popped, NewNode;
-
-  CurrentVertex = G->Vertices;
-  while ( CurrentVertex != NULL ) {
-    NewVertex = CreateVertex( CurrentVertex->Data );
-    AddVertex( ShortestPath, NewVertex);
-
-    Fringes[i]     = NULL;
-    Precedences[i] = NULL;
-    ShortestPathVertices[i] = NewVertex;
-    Weights[i]     = MAX_WEIGHT;
-    CurrentVertex  = CurrentVertex->Next;
-    i++;
-  }
-
-  PQ_Enqueue ( PQ, StartNode );
-
-  Weights[start->Index] = 0;
-
-  while( ! PQ_IsEmpty( PQ ) ) {
-    PQ_Dequeue(PQ, &Popped);
-    CurrentVertex = (Vertex*)Popped.Data;
-
-    Fringes[CurrentVertex->Index] = CurrentVertex;
-
-    CurrentEdge = CurrentVertex->AdjacencyList;
-
-    while ( CurrentEdge != NULL ) {
-      TargetVertex = CurrentEdge->Target;
-
-      if ( Fringes[TargetVertex->Index] == NULL &&
-           Weights[CurrentVertex->Index] + CurrentEdge->Weight < Weights[TargetVertex->Index] ) {
-        NewNode.Priority = CurrentEdge->Weight;
-        NewNode.Data = TargetVertex;
-        PQ_Enqueue ( PQ, NewNode );
-
-        Precedences[TargetVertex->Index] = CurrentEdge->From;
-        Weights[TargetVertex->Index] = Weights[CurrentVertex->Index] + CurrentEdge->Weight;
-      }
-
-      CurrentEdge = CurrentEdge->Next;
+    switch ( mode ) {
+      case prim:
+        AddEdge( new_Vertices[FromIndex], CreateEdge( new_Vertices[FromIndex], new_Vertices[ToIndex], Weights[i] ) );
+        break;
+      case dijkstra:
+        printf("%c %c %d\n", start->Data, new_Vertices[ToIndex]->Data, Weights[i] );
+        break;
     }
   }
 
-  for ( i=0; i<G->VertexCount; i++ ) {
-    int FromIndex, ToIndex;
-
-    if ( Precedences[i] == NULL ) continue;
-
-    FromIndex = Precedences[i]->Index;
-    ToIndex   = i;
-
-    printf("%c %c %d\n", start->Data, ShortestPathVertices[ToIndex]->Data, Weights[i] );
-  }
+  if ( mode == prim )
+    PrintGraph( new_Graph );
 
   free( Fringes );
   free( Precedences );
-  free( ShortestPathVertices );
+  free( new_Vertices );
   free( Weights );
-  DestroyGraph( ShortestPath );
+  DestroyGraph( new_Graph );
 
   PQ_Destroy( PQ );
 }
 
 
-void PrintGraph ( Graph* G )
-{
+void PrintGraph ( Graph* G ) {
   Vertex* V = NULL;
   Edge*   E = NULL;
 

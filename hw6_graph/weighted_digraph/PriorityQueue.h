@@ -5,25 +5,23 @@
 #include <memory.h>
 #include <stdlib.h>
 
-typedef int       PriorityType;
+typedef int PriorityType;
 
-typedef struct tagePQNode 
-{
+typedef struct {
     PriorityType Priority;
     void*        Data;
-} PQNode;
+} Node;
 
-typedef struct tagPriorityQueue 
-{
-    PQNode* Nodes;
-    int Capacity;
-    int UsedSize;
+typedef struct {
+    Node* array;
+    int   max_size;
+    int   size;
 } PriorityQueue;
 
 PriorityQueue* PQ_Create( int InitialSize );
 void           PQ_Destroy( PriorityQueue* PQ );
-void           PQ_Enqueue( PriorityQueue* PQ, PQNode NewData );
-void           PQ_Dequeue( PriorityQueue* PQ, PQNode* Root );
+void           PQ_Enqueue( PriorityQueue* PQ, Node NewData );
+void           PQ_Dequeue( PriorityQueue* PQ, Node* Root );
 int            PQ_GetParent( int Index );
 int            PQ_GetLeftChild( int Index );
 void           PQ_SwapNodes( PriorityQueue* PQ, int Index1, int Index2 );

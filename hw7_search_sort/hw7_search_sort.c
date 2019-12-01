@@ -11,10 +11,10 @@
 
 
 
-void test_sorting(void (*sort)(int*, int), int* arr, int len);
-int* get_random_array(int len, int max);
-int* copy_array(int* arr, int len);
-void print_array(int* arr, int len);
+int  binary_search(int* arr, int len, int item);
+int  binary_search_recursive(int* arr, int begin, int end, int item);
+
+// int hashed_search(int* arr, int item);
 
 void selection_sort(int* arr, int len);
 void insertion_sort(int* arr, int len);
@@ -27,6 +27,12 @@ int  partition(int* arr, int left, int right, int pivot);
 void merge_sort(int* arr, int len);
 void split_merge(int* arr, int* temp, int begin, int end);
 void merge(int* arr, int* temp, int begin, int mid, int end);
+
+void test_searching(int (*search)(int*, int, int), int* arr, int len, int max);
+void test_sorting(void (*sort)(int*, int), int* arr, int len);
+int* get_random_array(int len, int max);
+int* copy_array(int* arr, int len);
+void print_array(int* arr, int len);
 
 
 
@@ -43,14 +49,29 @@ int main() {
   printf("  set length of sequence : "); scanf("%d", &len);
   printf("  set maximum value : ");      scanf("%d", &max);
 
-  printf("\n");
+  printf("\n\n");
 
 
   printf("original random sequence\n");
 
   arr = get_random_array(len, max);
   print_array(arr, len);
+  printf("\n\n");
+
+
+
+  printf("Problem 1 : Search\n\n");
+
+  
+  printf("binary search\n");
+  test_searching(binary_search, arr, len, max);
   printf("\n");
+
+
+
+
+
+  printf("Problem 2 : Sort\n\n");
 
 
   printf("selection sort\n");
@@ -86,48 +107,35 @@ int main() {
 
 
 
-void test_sorting(void (*sort)(int*, int), int* arr, int len) {
-  int* copied_arr;
 
+int binary_search(int* arr, int len, int item) {
+  
+  int index_in_sorted_array, *copied_arr;
+  
   copied_arr = copy_array(arr, len);
-  sort(copied_arr, len);
-  print_array(copied_arr, len);
+  quick_sort(copied_arr, len);
+  
+  index_in_sorted_array = binary_search_recursive(copied_arr, 0, len-1, item);
 
   free(copied_arr);
+
+  return index_in_sorted_array;
 }
 
 
-int* get_random_array(int len, int max) {
-  int *new_arr, i;
+int binary_search_recursive(int* arr, int begin, int end, int item) {
+  int mid;
 
-  if ( !(new_arr = (int*)malloc(sizeof(int) * len)) )
-    return NULL;
+  if ( begin > end ) return -1;
 
-  for ( i = 0; i < len; i++ )
-    new_arr[i] = rand() % (max + 1);
+  mid = ( begin + end ) / 2;
 
-  return new_arr;
-}
-
-
-int* copy_array(int* arr, int len) {
-  int *new_array, i;
-
-  if ( !(new_array = (int*)malloc(sizeof(int) * len)) )
-    return NULL;
-
-  memcpy(new_array, arr, sizeof(int) * len);
-
-  return new_array;
-}
-
-
-void print_array(int* arr, int len) {
-  int i;
-
-  for ( i = 0; i < len; i++ )
-    printf("%d ", arr[i]);
-  printf("\n");
+  if ( arr[mid] == item )
+    return mid;
+  else if ( arr[mid] > item )
+    return binary_search_recursive(arr, begin, mid-1, item);
+  else
+    return binary_search_recursive(arr, mid+1, end, item);
 }
 
 
@@ -186,6 +194,7 @@ void quick_sort(int* arr, int len) {
   quick_sort_recursive(arr, 0, len-1);
 }
 
+
 void quick_sort_recursive(int* arr, int left, int right) {
 
   int pivot_index = right; 
@@ -241,7 +250,7 @@ void split_merge(int* arr, int* temp, int begin, int end) {
 
   split_merge(temp, arr, begin, mid);
   split_merge(temp, arr, mid+1, end);
-  merge(arr, temp, begin, mid, end);    // change the role of arr and temp.
+  merge(arr, temp, begin, mid, end);  // change the role of arr and temp.
 }
 
 
@@ -259,3 +268,61 @@ void merge(int* arr, int* temp, int begin, int mid, int end) {
   }
 }
 
+
+void test_searching(int (*search)(int*, int, int), int* arr, int len, int max) {
+  int item, hit;
+
+  printf("item\thit\n");
+
+  for ( item = 0; item <= max; item++ ) {
+    hit = (search(arr, len, item) != -1);
+    printf("%d\t%d\n", item, hit);
+  }
+
+  printf("\n");
+}
+
+
+void test_sorting(void (*sort)(int*, int), int* arr, int len) {
+  int* copied_arr;
+
+  copied_arr = copy_array(arr, len);
+  sort(copied_arr, len);
+  print_array(copied_arr, len);
+
+  free(copied_arr);
+}
+
+
+int* get_random_array(int len, int max) {
+  int *new_arr, i;
+
+  if ( !(new_arr = (int*)malloc(sizeof(int) * len)) )
+    return NULL;
+
+  for ( i = 0; i < len; i++ )
+    new_arr[i] = rand() % (max + 1);
+
+  return new_arr;
+}
+
+
+int* copy_array(int* arr, int len) {
+  int *new_array, i;
+
+  if ( !(new_array = (int*)malloc(sizeof(int) * len)) )
+    return NULL;
+
+  memcpy(new_array, arr, sizeof(int) * len);
+
+  return new_array;
+}
+
+
+void print_array(int* arr, int len) {
+  int i;
+
+  for ( i = 0; i < len; i++ )
+    printf("%d ", arr[i]);
+  printf("\n");
+}

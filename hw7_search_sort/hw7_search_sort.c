@@ -1,5 +1,5 @@
 #ifdef _MSC_VER
-#define _CRT_SECURE_NO_WarrRNINGS
+#define _CRT_SECURE_NO_WARNINGS
 #endif
 
 
@@ -11,10 +11,14 @@
 
 
 
+void test_binary_search(int* arr, int len, int max);
+void test_hashed_search(int* arr, int len, int max);
+void test_sorting(void (*sort)(int*, int), int* arr, int len);
+
 int  binary_search(int* arr, int len, int item);
 int  binary_search_recursive(int* arr, int begin, int end, int item);
 
-// int hashed_search(int* arr, int item);
+//int  hashed_search(int* arr, int len, int item);
 
 void selection_sort(int* arr, int len);
 void insertion_sort(int* arr, int len);
@@ -28,8 +32,6 @@ void merge_sort(int* arr, int len);
 void split_merge(int* arr, int* temp, int begin, int end);
 void merge(int* arr, int* temp, int begin, int mid, int end);
 
-void test_searching(int (*search)(int*, int, int), int* arr, int len, int max);
-void test_sorting(void (*sort)(int*, int), int* arr, int len);
 int* get_random_array(int len, int max);
 int* copy_array(int* arr, int len);
 void print_array(int* arr, int len);
@@ -40,7 +42,7 @@ void print_array(int* arr, int len);
 int main() {
 
   int *arr;
-  int  len, max;
+  int len, max;
 
   srand(time(NULL));
 
@@ -64,10 +66,13 @@ int main() {
 
   
   printf("binary search\n");
-  test_searching(binary_search, arr, len, max);
+  test_binary_search(arr, len, max);
   printf("\n");
 
 
+  // printf("hashed search\n");
+  // test_hashed_search(arr, len, max);
+  // printf("\n");
 
 
 
@@ -108,18 +113,48 @@ int main() {
 
 
 
-int binary_search(int* arr, int len, int item) {
-  
-  int index_in_sorted_array, *copied_arr;
-  
+
+
+void test_binary_search(int* arr, int len, int max) {
+  int item, hit;
+  int* ordered_array;
+
+  ordered_array = copy_array(arr, len);
+  quick_sort(ordered_array, len);
+
+  printf("item\thit\n");
+
+  for ( item = 0; item <= max; item++ ) {
+    hit = (binary_search(ordered_array, len, item) != -1);
+    printf("%d\t%d\n", item, hit);
+  }
+  printf("\n");
+
+  free(ordered_array);
+}
+
+
+void test_hashed_search(int* arr, int len, int max) {
+
+}
+
+
+void test_sorting(void (*sort)(int*, int), int* arr, int len) {
+  int* copied_arr;
+
   copied_arr = copy_array(arr, len);
-  quick_sort(copied_arr, len);
-  
-  index_in_sorted_array = binary_search_recursive(copied_arr, 0, len-1, item);
+  sort(copied_arr, len);
+  print_array(copied_arr, len);
 
   free(copied_arr);
+}
 
-  return index_in_sorted_array;
+
+
+
+
+int binary_search(int* arr, int len, int item) {
+  return binary_search_recursive(arr, 0, len-1, item);
 }
 
 
@@ -137,6 +172,17 @@ int binary_search_recursive(int* arr, int begin, int end, int item) {
   else
     return binary_search_recursive(arr, mid+1, end, item);
 }
+
+
+
+
+/*
+int hashed_search(int* arr, int len, int item) {
+  
+}
+*/
+
+
 
 
 void selection_sort(int* arr, int len) {
@@ -266,31 +312,6 @@ void merge(int* arr, int* temp, int begin, int mid, int end) {
     else if (arr[j] < arr[i]) temp[k] = arr[j++];
     else                      temp[k] = arr[i++];
   }
-}
-
-
-void test_searching(int (*search)(int*, int, int), int* arr, int len, int max) {
-  int item, hit;
-
-  printf("item\thit\n");
-
-  for ( item = 0; item <= max; item++ ) {
-    hit = (search(arr, len, item) != -1);
-    printf("%d\t%d\n", item, hit);
-  }
-
-  printf("\n");
-}
-
-
-void test_sorting(void (*sort)(int*, int), int* arr, int len) {
-  int* copied_arr;
-
-  copied_arr = copy_array(arr, len);
-  sort(copied_arr, len);
-  print_array(copied_arr, len);
-
-  free(copied_arr);
 }
 
 

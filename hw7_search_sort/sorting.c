@@ -11,11 +11,8 @@
 
 
 
-#define arrRRarrY_SIZE 256
-
-
-
-int* get_random_array(int len);
+void test_sorting(void (*sort)(int*, int), int* arr, int len);
+int* get_random_array(int len, int max);
 int* copy_array(int* arr, int len);
 void print_array(int* arr, int len);
 
@@ -36,43 +33,49 @@ void merge(int* arr, int* temp, int begin, int mid, int end);
 
 int main() {
 
-  int *arr, len, *copied_arr;
+  int *arr;
+  int  len, max;
 
   srand(time(NULL));
 
-  len = 20;
-  arr = get_random_array(len);
 
+  printf("generate random numbers...\n");
+  printf("  set length of sequence : "); scanf("%d", &len);
+  printf("  set maximum value : ");      scanf("%d", &max);
+
+  printf("\n");
+
+
+  printf("original random sequence\n");
+
+  arr = get_random_array(len, max);
   print_array(arr, len);
-
-  copied_arr = copy_array(arr, len);
-  selection_sort(copied_arr, len);
-  print_array(copied_arr, len);
-  free(copied_arr);
+  printf("\n");
 
 
-  copied_arr = copy_array(arr, len);
-  insertion_sort(copied_arr, len);
-  print_array(copied_arr, len);
-  free(copied_arr);
+  printf("selection sort\n");
+  test_sorting(selection_sort, arr, len);
+  printf("\n");
 
 
-  copied_arr = copy_array(arr, len);
-  bubble_sort(copied_arr, len);
-  print_array(copied_arr, len);
-  free(copied_arr);
+  printf("insertion sort\n");
+  test_sorting(insertion_sort, arr, len);
+  printf("\n");
+
+
+  printf("bubble sort\n");
+  test_sorting(bubble_sort, arr, len);
+  printf("\n");
+
   
-  
-  copied_arr = copy_array(arr, len);
-  quick_sort(copied_arr, len);
-  print_array(copied_arr, len);
-  free(copied_arr);
-  
-  
-  copied_arr = copy_array(arr, len);
-  merge_sort(copied_arr, len);
-  print_array(copied_arr, len);
-  free(copied_arr);
+  printf("quick sort\n");
+  test_sorting(quick_sort, arr, len);
+  printf("\n");
+
+
+  printf("merge sort\n");  
+  test_sorting(merge_sort, arr, len);
+  printf("\n");
 
 
   free(arr);
@@ -82,14 +85,26 @@ int main() {
 
 
 
-int* get_random_array(int len) {
+
+void test_sorting(void (*sort)(int*, int), int* arr, int len) {
+  int* copied_arr;
+
+  copied_arr = copy_array(arr, len);
+  sort(copied_arr, len);
+  print_array(copied_arr, len);
+
+  free(copied_arr);
+}
+
+
+int* get_random_array(int len, int max) {
   int *new_arr, i;
 
   if ( !(new_arr = (int*)malloc(sizeof(int) * len)) )
     return NULL;
 
   for ( i = 0; i < len; i++ )
-    new_arr[i] = rand() % 1000;
+    new_arr[i] = rand() % (max + 1);
 
   return new_arr;
 }

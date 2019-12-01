@@ -198,6 +198,7 @@ void quick_sort_recursive(int* arr, int left, int right) {
     quick_sort_recursive(arr, pivot_index+1, right);
 }
 
+
 int partition(int* arr, int left, int right, int pivot_index) {
   int temp;
   int pivot = arr[pivot_index];

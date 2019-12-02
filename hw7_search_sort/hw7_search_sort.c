@@ -7,20 +7,25 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <math.h>
+
 
 
 
 
 void test_binary_search(int* arr, int len, int max);
 void set_array(int** ordered_array, int** index_array, int* arr, int len);
-// void test_hashed_search(int* arr, int len, int max);
+void test_hashed_search(int* arr, int len, int max);
 void test_sorting(void (*sort)(int*, int), int* arr, int len);
 
 int  binary_search(int* arr, int len, int item);
 int  binary_search_recursive(int* arr, int begin, int end, int item);
 
-// int  hashed_search(int* arr, int len, int item);
-// int* create_hash_table(int* arr, int len, int max);
+int  hashed_search(int* arr, int len, int item);
+int* create_hash_table(int* arr, int len, int max, int* table_size);
+int  hash(int data, int table_size);
+int  get_table_size(int max);
+int  collision(int hashed_key, int table_size);
 
 void selection_sort(int* arr, int len);
 void insertion_sort(int* arr, int len);
@@ -72,9 +77,9 @@ int main() {
   printf("\n");
 
 
-  // printf("hashed search\n");
-  // test_hashed_search(arr, len, max);
-  // printf("\n");
+  printf("hashed search\n");
+  test_hashed_search(arr, len, max);
+  printf("\n");
 
 
 
@@ -118,19 +123,23 @@ int main() {
 
 
 void test_binary_search(int* arr, int len, int max) {
-  int item, result, index;
+  int item, result, index, re_accessed;
   int *ordered_array, *index_array;
 
   set_array(&ordered_array, &index_array, arr, len);
 
-  printf("item\tindex\n");
+  printf("item\tindex\tre-accessed\n");
 
   for ( item = 0; item <= max; item++ ) {
     result = binary_search(ordered_array, len, item);
-    if ( result == -1 ) index = -1;
-    else                index = index_array[result];
+    if ( result == -1 ) 
+      index = re_accessed = -1;
+    else {
+      index       = index_array[result];
+      re_accessed = arr[index];
+    }
 
-    printf("%d\t%d\n", item, index);
+    printf("%d\t%d\t%d\n", item, index, re_accessed);
   }
   printf("\n");
 
@@ -164,19 +173,89 @@ void set_array(int** ordered_array, int** index_array, int* arr, int len) {
 }
 
 
-// void test_hashed_search(int* arr, int len, int max) {
-
-// }
 
 
-void test_sorting(void (*sort)(int*, int), int* arr, int len) {
-  int* copied_array;
 
-  copied_array = copy_array(arr, len);
-  sort(copied_array, len);
-  print_array(copied_array, len);
+void test_hashed_search(int* arr, int len, int max) {
+  int item, result, index, re_accessed;
+  int *hash_table, table_size;
 
-  free(copied_array);
+  hash_table = create_hash_table(arr, len, max, &table_size);
+
+  print_array(hash_table, table_size);
+
+  printf("item\thashed\tindex\tre-accessed\n");
+
+  for ( item = 0; item <= max; item++ ) {
+    result = hashed_search(hash_table, table_size, item);
+    if ( result == -1 )
+      index = re_accessed = -1;
+    else {
+      index       = hash_table[result];
+      re_accessed = arr[index];
+    }
+    
+    printf("%d\t%d\t%d\t%d\n", item, result, index, re_accessed);
+  }
+  printf("\n");
+
+  free(hash_table);
+}
+
+
+int* create_hash_table(int* arr, int len, int max, int* table_size) {
+  int* hash_table;
+  int  hashed_key, index, cnt;
+
+  *table_size = get_table_size(max);
+  hash_table = (int*) malloc(sizeof(int) * (*table_size));
+  memset(hash_table, -1, sizeof(int) * (*table_size));
+
+  for ( index = 0; index < len; index++ ) {
+    hashed_key = hash(arr[index], *table_size);
+
+    if ( hash_table[hashed_key] != -1 ) {
+      cnt = 0;
+      while ( (hash_table[hashed_key] != -1) && (cnt++ < *table_size) ) 
+        hashed_key = collision(hashed_key, *table_size);
+
+      if ( hash_table[hashed_key] != -1 ) {
+        printf("fail to hash %d. table is full.\n", arr[index]);
+      }
+    }
+    hash_table[hashed_key] = index;
+  }
+
+  return hash_table;
+}
+
+
+int hash(int data, int table_size) {
+  return data % table_size;
+}
+
+
+int get_table_size(int max) {
+  int table_size, is_prime, i;
+
+  table_size = (int) (max * 1.3);
+
+  while ( 1 ) {
+    for ( is_prime = 1, i = 2; i <= sqrt(table_size); i++ ) {
+      if ( table_size % i == 0 ) {
+        is_prime = 0; break;
+      }
+    }
+
+    if ( is_prime ) break;
+    table_size++;
+  }
+
+  return table_size;
+}
+
+int collision(int hashed_key, int table_size) {
+  return hashed_key < table_size - 1 ? hashed_key + 1 : 0;
 }
 
 
@@ -206,13 +285,38 @@ int binary_search_recursive(int* arr, int begin, int end, int item) {
 
 
 
-/*
-int hashed_search(int* arr, int len, int item) {
+
+int hashed_search(int* hash_table, int table_size, int item) {
+  int hashed_key, cnt; 
+
+  hashed_key = hash(item, table_size);
+
+  if ( item != hash_table[hashed_key] ) {
+    cnt = 0;
+    while ( (item != hash_table[hashed_key]) && (cnt++ < table_size) )
+      hashed_key = collision(hashed_key, table_size);
+  }
+
+  if ( item == hash_table[hashed_key] ) 
+    return hashed_key;
   
+  return -1;
 }
-*/
 
 
+
+
+
+
+void test_sorting(void (*sort)(int*, int), int* arr, int len) {
+  int* copied_array;
+
+  copied_array = copy_array(arr, len);
+  sort(copied_array, len);
+  print_array(copied_array, len);
+
+  free(copied_array);
+}
 
 
 void selection_sort(int* arr, int len) {

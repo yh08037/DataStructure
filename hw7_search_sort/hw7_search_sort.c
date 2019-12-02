@@ -12,13 +12,15 @@
 
 
 void test_binary_search(int* arr, int len, int max);
-void test_hashed_search(int* arr, int len, int max);
+void set_array(int** ordered_array, int** index_array, int* arr, int len);
+// void test_hashed_search(int* arr, int len, int max);
 void test_sorting(void (*sort)(int*, int), int* arr, int len);
 
 int  binary_search(int* arr, int len, int item);
 int  binary_search_recursive(int* arr, int begin, int end, int item);
 
-//int  hashed_search(int* arr, int len, int item);
+// int  hashed_search(int* arr, int len, int item);
+// int* create_hash_table(int* arr, int len, int max);
 
 void selection_sort(int* arr, int len);
 void insertion_sort(int* arr, int len);
@@ -116,37 +118,65 @@ int main() {
 
 
 void test_binary_search(int* arr, int len, int max) {
-  int item, hit;
-  int* ordered_array;
+  int item, result, index;
+  int *ordered_array, *index_array;
 
-  ordered_array = copy_array(arr, len);
-  quick_sort(ordered_array, len);
+  set_array(&ordered_array, &index_array, arr, len);
 
-  printf("item\thit\n");
+  printf("item\tindex\n");
 
   for ( item = 0; item <= max; item++ ) {
-    hit = (binary_search(ordered_array, len, item) != -1);
-    printf("%d\t%d\n", item, hit);
+    result = binary_search(ordered_array, len, item);
+    if ( result == -1 ) index = -1;
+    else                index = index_array[result];
+
+    printf("%d\t%d\n", item, index);
   }
   printf("\n");
 
   free(ordered_array);
+  free(index_array);
 }
 
 
-void test_hashed_search(int* arr, int len, int max) {
+void set_array(int** ordered_array, int** index_array, int* arr, int len) {
+  int i, j, temp1, temp2;
+  
+  *ordered_array = copy_array(arr, len);
+  *index_array = (int*)malloc(sizeof(int) * len);
 
+  for ( i = 0; i < len; i++ ) 
+    (*index_array)[i] = i; 
+
+
+  for ( i = 1; i < len; i++ ) {
+    temp1 = (*ordered_array)[i];
+    temp2 = (*index_array)[i];
+
+    for ( j = i ; j > 0 && temp1 < (*ordered_array)[j-1]; j-- ) {
+      (*ordered_array)[j] = (*ordered_array)[j-1];
+      (*index_array)[j]   = (*index_array)[j-1];
+    }
+
+    (*ordered_array)[j] = temp1;
+    (*index_array)[j]   = temp2;
+  }
 }
+
+
+// void test_hashed_search(int* arr, int len, int max) {
+
+// }
 
 
 void test_sorting(void (*sort)(int*, int), int* arr, int len) {
-  int* copied_arr;
+  int* copied_array;
 
-  copied_arr = copy_array(arr, len);
-  sort(copied_arr, len);
-  print_array(copied_arr, len);
+  copied_array = copy_array(arr, len);
+  sort(copied_array, len);
+  print_array(copied_array, len);
 
-  free(copied_arr);
+  free(copied_array);
 }
 
 
@@ -316,15 +346,15 @@ void merge(int* arr, int* temp, int begin, int mid, int end) {
 
 
 int* get_random_array(int len, int max) {
-  int *new_arr, i;
+  int *new_array, i;
 
-  if ( !(new_arr = (int*)malloc(sizeof(int) * len)) )
+  if ( !(new_array = (int*)malloc(sizeof(int) * len)) )
     return NULL;
 
   for ( i = 0; i < len; i++ )
-    new_arr[i] = rand() % (max + 1);
+    new_array[i] = rand() % (max + 1);
 
-  return new_arr;
+  return new_array;
 }
 
 

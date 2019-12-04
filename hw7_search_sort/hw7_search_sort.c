@@ -15,17 +15,19 @@
 
 void test_binary_search(int* arr, int len, int max);
 void set_array(int** ordered_array, int** index_array, int* arr, int len);
-void test_hashed_search(int* arr, int len, int max);
-void test_sorting(void (*sort)(int*, int), int* arr, int len);
 
 int  binary_search(int* arr, int len, int item);
 int  binary_search_recursive(int* arr, int begin, int end, int item);
 
-int  hashed_search(int* arr, int len, int item);
+void test_hashed_search(int* arr, int len, int max);
+
+int  hashed_search(int* hash_table, int* arr, int table_size, int item);
 int* create_hash_table(int* arr, int len, int max, int* table_size);
 int  hash(int data, int table_size);
 int  get_table_size(int max);
 int  collision(int hashed_key, int table_size);
+
+void test_sorting(void (*sort)(int*, int), int* arr, int len);
 
 void selection_sort(int* arr, int len);
 void insertion_sort(int* arr, int len);
@@ -120,8 +122,6 @@ int main() {
 
 
 
-
-
 void test_binary_search(int* arr, int len, int max) {
   int item, result, index, re_accessed;
   int *ordered_array, *index_array;
@@ -155,7 +155,7 @@ void set_array(int** ordered_array, int** index_array, int* arr, int len) {
   *index_array = (int*)malloc(sizeof(int) * len);
 
   for ( i = 0; i < len; i++ ) 
-    (*index_array)[i] = i; 
+    (*index_array)[i] = i;
 
 
   for ( i = 1; i < len; i++ ) {
@@ -173,6 +173,28 @@ void set_array(int** ordered_array, int** index_array, int* arr, int len) {
 }
 
 
+int binary_search(int* arr, int len, int item) {
+  return binary_search_recursive(arr, 0, len-1, item);
+}
+
+
+int binary_search_recursive(int* arr, int begin, int end, int item) {
+  int mid;
+
+  if ( begin > end ) return -1;
+
+  mid = ( begin + end ) / 2;
+
+  if ( arr[mid] == item )
+    return mid;
+  else if ( arr[mid] > item )
+    return binary_search_recursive(arr, begin, mid-1, item);
+  else
+    return binary_search_recursive(arr, mid+1, end, item);
+}
+
+
+
 
 
 
@@ -182,12 +204,10 @@ void test_hashed_search(int* arr, int len, int max) {
 
   hash_table = create_hash_table(arr, len, max, &table_size);
 
-  print_array(hash_table, table_size);
-
-  printf("item\thashed\tindex\tre-accessed\n");
+  printf("item\tindex\tre-accessed\n");
 
   for ( item = 0; item <= max; item++ ) {
-    result = hashed_search(hash_table, table_size, item);
+    result = hashed_search(hash_table, arr, table_size, item);
     if ( result == -1 )
       index = re_accessed = -1;
     else {
@@ -195,11 +215,29 @@ void test_hashed_search(int* arr, int len, int max) {
       re_accessed = arr[index];
     }
     
-    printf("%d\t%d\t%d\t%d\n", item, result, index, re_accessed);
+    printf("%d\t%d\t%d\n", item, index, re_accessed);
   }
   printf("\n");
 
   free(hash_table);
+}
+
+
+int hashed_search(int* hash_table, int* arr, int table_size, int item) {
+  int hashed_key, cnt; 
+
+  hashed_key = hash(item, table_size);
+
+  if ( item != arr[hash_table[hashed_key]] ) {
+    cnt = 0;
+    while ( (item != arr[hash_table[hashed_key]]) && (cnt++ < table_size) )
+      hashed_key = collision(hashed_key, table_size);
+  }
+
+  if ( item == arr[hash_table[hashed_key]] ) 
+    return hashed_key;
+  
+  return -1;
 }
 
 
@@ -231,7 +269,9 @@ int* create_hash_table(int* arr, int len, int max, int* table_size) {
 
 
 int hash(int data, int table_size) {
-  return data % table_size;
+  srand(data);
+  return rand() % table_size;
+  // return data % table_size;
 }
 
 
@@ -257,52 +297,6 @@ int get_table_size(int max) {
 int collision(int hashed_key, int table_size) {
   return hashed_key < table_size - 1 ? hashed_key + 1 : 0;
 }
-
-
-
-
-
-int binary_search(int* arr, int len, int item) {
-  return binary_search_recursive(arr, 0, len-1, item);
-}
-
-
-int binary_search_recursive(int* arr, int begin, int end, int item) {
-  int mid;
-
-  if ( begin > end ) return -1;
-
-  mid = ( begin + end ) / 2;
-
-  if ( arr[mid] == item )
-    return mid;
-  else if ( arr[mid] > item )
-    return binary_search_recursive(arr, begin, mid-1, item);
-  else
-    return binary_search_recursive(arr, mid+1, end, item);
-}
-
-
-
-
-
-int hashed_search(int* hash_table, int table_size, int item) {
-  int hashed_key, cnt; 
-
-  hashed_key = hash(item, table_size);
-
-  if ( item != hash_table[hashed_key] ) {
-    cnt = 0;
-    while ( (item != hash_table[hashed_key]) && (cnt++ < table_size) )
-      hashed_key = collision(hashed_key, table_size);
-  }
-
-  if ( item == hash_table[hashed_key] ) 
-    return hashed_key;
-  
-  return -1;
-}
-
 
 
 
@@ -447,6 +441,10 @@ void merge(int* arr, int* temp, int begin, int mid, int end) {
     else                      temp[k] = arr[i++];
   }
 }
+
+
+
+
 
 
 int* get_random_array(int len, int max) {

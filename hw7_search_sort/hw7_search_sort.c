@@ -79,6 +79,7 @@ int main() {
   printf("\n");
 
 
+  // hash : pseudorandom, collision : linear probing
   printf("hashed search\n");
   test_hashed_search(arr, len, max);
   printf("\n");
@@ -269,9 +270,7 @@ int* create_hash_table(int* arr, int len, int max, int* table_size) {
 
 
 int hash(int data, int table_size) {
-  srand(data);
-  return rand() % table_size;
-  // return data % table_size;
+  return (17 * data + 7) % table_size;
 }
 
 

@@ -3,7 +3,7 @@
 ## HW1. Stack 
 1. Implement the following ADT stack using array and linked list; you should implement both of them. You should utilize them at the next problems. (다음의 ADT를 만족하는 stack을 array와 linked list 두 가지 버전으로 구현하시오. 이 구현한 부분을 이후 문제에서는 활용할 것.)
 
-![hw1_1](images/1_1.png)
+![hw1_1](../images/1_1.png)
 
 2. Reversing data. Print out the input data as its reversing order. (모든 자료를 Push하고 모두 Pop하기)
 

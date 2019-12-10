@@ -1,5 +1,5 @@
-#ifndef COMPLETE_BT
-#define COMPLETE_BT
+#ifndef LL_BT
+#define LL_BT
 
 #ifndef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 
-typedef enum { false, true } bool;
+typedef enum {false, true} bool;
 
 typedef char Element;
 

@@ -25,7 +25,7 @@
 
 4. [HW3 : Ordered List](https://github.com/yh08037/DataStructure/tree/master/hw3_ordered_list)
 
-5. [HW4 : Complete Binary Tree](https://github.com/yh08037/DataStructure/tree/master/hw4_complete_bst)
+5. [HW4 : Complete Binary Tree](https://github.com/yh08037/DataStructure/tree/master/hw4_complete_bt)
 
 6. [HW5 : Binary Search Tree](https://github.com/yh08037/DataStructure/tree/master/hw5_bst)
 
